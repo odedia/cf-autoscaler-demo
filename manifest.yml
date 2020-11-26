@@ -3,5 +3,5 @@ applications:
   - name: autoscaler
     memory: 768M
     no-route: true
-    path: target/app.jar
     health-check-type: process
+    path: target/app.jar
