@@ -5,3 +5,5 @@ applications:
     no-route: true
     health-check-type: process
     path: target/app.jar
+    services:
+    - autoscaler

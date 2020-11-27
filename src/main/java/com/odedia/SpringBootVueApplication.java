@@ -48,6 +48,7 @@ public class SpringBootVueApplication {
 	@Value("${cf.metricLowerBound}")
 	private Integer metricLowerBound;
 	
+	private static Double messagesSinceLastTime = 0.0;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootVueApplication.class, args);
@@ -74,20 +75,24 @@ public class SpringBootVueApplication {
 
 		Integer currentInstances = currentAppInstances();
 	
-		Double mySpecialLogic = ((Gauge)metricFamilies.get(prometheusMetric).getMetrics().get(0)).getValue();
+		Double mySpecialLogic = ((Gauge)metricFamilies.get(prometheusMetric).getMetrics().get(0)).getValue() - messagesSinceLastTime;
 		
 		System.out.print("With Value " + mySpecialLogic + " and Current Instances " + currentInstances + " --> ");
 		
 		if (mySpecialLogic >= metricUpperBound && currentInstances < maxInstances) {
+			
 				System.out.print("Scaling up");
 				ScaleApplicationRequest req = ScaleApplicationRequest.builder().instances(currentInstances + 1).name(appName).build();
 				cloudFoundryOperations.applications().scale(req).subscribe(System.out::println);
 		} else if (mySpecialLogic <=metricLowerBound && currentInstances > minInstances) {
+			
 			System.out.print("Scaling down");
 			ScaleApplicationRequest req = ScaleApplicationRequest.builder().instances(currentInstances - 1).name(appName).build();
 			cloudFoundryOperations.applications().scale(req).subscribe(System.out::println);
 		}
 		System.out.println("");
+		
+		messagesSinceLastTime = ((Gauge)metricFamilies.get(prometheusMetric).getMetrics().get(0)).getValue();
 	}
 
 	private Integer currentAppInstances() {
