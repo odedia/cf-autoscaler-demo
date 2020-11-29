@@ -1,7 +1,7 @@
 {
   "cf.username": "<CF USERNAME WITH SCALING PERMISSIONS>",
   "cf.password": "<CF USER PASSWORD WITH SCALING PERMISSIONS>",
-  "cf.apiHost": "api.<CF DOMAIN ENDPOING>",
+  "cf.apiHost": "api.<CF DOMAIN ENDPOINT>",
   "cf.organization": "<THE ORG WHERE THE TARGET APP TO SCALE LIVES IN>",
   "cf.space": "<THE SPACE WHERE THE TARGET APP TO SCALE LIVES IN>",
   "cf.appName": "<THE APP NAME FOR SCALING>",
